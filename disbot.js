@@ -1,46 +1,13 @@
 const { Client } = require("discord.js-selfbot-v13");
 const { Client: BotClient, GatewayIntentBits } = require("discord.js");
-const fs = require("fs");
-const path = require("path");
-
-const loadEnvFile = () => {
-  const envPath = path.resolve(process.cwd(), ".env");
-  if (!fs.existsSync(envPath)) return;
-
-  const content = fs.readFileSync(envPath, "utf8");
-  const lines = content.split(/\r?\n/);
-
-  for (const line of lines) {
-    const trimmed = line.trim();
-    if (!trimmed || trimmed.startsWith("#")) continue;
-
-    const separatorIndex = trimmed.indexOf("=");
-    if (separatorIndex === -1) continue;
-
-    const key = trimmed.slice(0, separatorIndex).trim();
-    const value = trimmed.slice(separatorIndex + 1).trim();
-    if (!process.env[key]) {
-      process.env[key] = value;
-    }
-  }
-};
-
-loadEnvFile();
-
-const requireEnv = (name) => {
-  const value = process.env[name];
-  if (!value) {
-    throw new Error(`Missing required environment variable: ${name}`);
-  }
-  return value;
-};
 
 const botInstances = [
+  //provide the following informations
   {
-    botToken: requireEnv("BOT_TOKEN"),
-    recipientUserId: requireEnv("RECIPIENT_USER_ID"),
-    userToken: requireEnv("USER_TOKEN"),
-    email: process.env.EMAIL || "default",
+    botToken: "MTUwNjQxNTM3NTM0MzE2MTQyNg.GzkIUw.8tBXmwwgSxoQvY3UspuL38XgNLS0gzF4pZ9sqs",
+    recipientUserId: "894137606718255134",
+    userToken: "ODk0MTM3NjA2NzE4MjU1MTM0.GXkC9Q.3mGhEEr2PmdIe9aBMXYeDhTy7GgsPlzOj__8rE",
+    email: "davidalumartin@gmail.com",
   },
 ];
 
@@ -71,6 +38,7 @@ const initializeBot = ({ botToken, recipientUserId, userToken, email }) => {
 
   client.on("guildMemberAdd", async (member) => {
     try {
+      console.log(member)
       const welcomeMessage = `${member.user.tag} has joined the server ${member.guild.name}`;
       const user = await botClient.users.fetch(recipientUserId);
       await user.send(welcomeMessage);
